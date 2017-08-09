@@ -39,7 +39,6 @@ int MAX31855_Read(float *tempValue, float *internalTempValue) {
 	int tmp, intTemp, remTemp;
 	int internalTmp, internalIntTmp, internalRemTmp;
 	float temperature, internalTemperature;
-	short address, buffer;
 	
 	uint8_t buffer[4] = {0x00, 0x00, 0x00, 0x00};           // Variable to be used for the 4 bytes coming from the registers
 								// Clear the memory being used by the buffer
@@ -47,7 +46,7 @@ int MAX31855_Read(float *tempValue, float *internalTempValue) {
 
 	if (spi_transfer(NULL, buffer, sizeof(buffer)) < 0) {			// Read four bytes from SPI port, pass NULL for the TX buffer, buffer for the RX buffer                                                          
                 printf("thermo: Failed to read temperature from sensor\n");                     
-                return;                                                                                  
+                return (-1);                                                                                  
         }                                                                                                
         
 	// printf ("The buffer 0 is %x \n", buffer[0]);  //debug code to print the buffer read from the MAX31855 to the console
