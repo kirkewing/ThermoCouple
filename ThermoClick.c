@@ -10,6 +10,8 @@
 	- Converted to Creator Ci40
 	20170809
 	- Added in Internal Temperature reading
+	20170809
+	-Encapsulated the code properly
  * Description:
       This is a simple project which demonstrates the use of THERMO click board.
       Temperature measured by the thermocouple is converter by MAX31855 and written to the console.
@@ -33,13 +35,13 @@
 #include <letmecreate/core/gpio_monitor.h>
 #include <letmecreate/core/spi.h>
 
-int tmp, intTemp, remTemp;
-int internalTmp, internalIntTmp, internalRemTmp;
-float temperature, internalTemperature;
-short address, buffer;
-
-void MAX31855_Read() {                                                                             
-        uint8_t buffer[4] = {0x00, 0x00, 0x00, 0x00};           // Variable to be used for the 4 bytes coming from the registers
+int MAX31855_Read(float *tempValue, float *internalTempValue) {                                                                             
+	int tmp, intTemp, remTemp;
+	int internalTmp, internalIntTmp, internalRemTmp;
+	float temperature, internalTemperature;
+	short address, buffer;
+	
+	uint8_t buffer[4] = {0x00, 0x00, 0x00, 0x00};           // Variable to be used for the 4 bytes coming from the registers
 								// Clear the memory being used by the buffer
 								// I was getting random numbers when spi_transfer was used incorrectly
 
@@ -61,7 +63,7 @@ void MAX31855_Read() {
         temperature = remTemp * 0.25;                 // Multiply bottom three bits by 0.25 to get decimal part of temerature and store                                     
         intTemp = tmp >> 4;                           // Remove D16 through D19 which do not contain integer part of temperature value               
         temperature += intTemp;                       // Add integer part to temperature value                
-        printf("Read the Temp %.3f \n", temperature); // Write temperature to the console                                           
+        // printf("Read the Temp %.3f \n", temperature); // Write temperature to the console                                           
         
 	internalTmp = buffer[2];			// Place the first byte in internalTmp variable
 	internalTmp = internalTmp << 8;			// Bit shift first byte up 8 bits
@@ -71,40 +73,49 @@ void MAX31855_Read() {
 	internalTemperature = internalRemTmp * 0.0625;	// Multiply bottom three bits by 0.0625 to get decimal part of temerature and store
 	internalIntTmp = internalTmp >> 9;		// Remove D16 through D19 which do not contain integer part of temperature value
 	internalTemperature += internalIntTmp;		// Add integer part to internalTemperature value
-	printf("Read the Internal Temp %.4f \n", internalTemperature);	// Write internal temperature to the console 
+	// printf("Read the Internal Temp %.4f \n", internalTemperature);	// Write internal temperature to the console 
 
         if((buffer[1] & 0x01) == 0x01){          // Fault detection                           
                  printf("Error!");                                                                
                  if((buffer[3] & 0x01) == 0x01){        // Open circuit fault?  
                          printf("Open circuit\n");           // Write text in first row
-                         sleep(1);                                             
+                         return (-1);                                             
                  }                                                                                
                                                                                                   
                  if((buffer[3] & 0x02) == 0x02){        // Short to GND fault?                 
                          printf("Short to GND\n");           // Write text in first row
-                         sleep(1);                                             
+                         return (-1);                                             
                  }                                                                   
                                                                                      
                  if((buffer[3] & 0x04) == 0x04){        // Short to Vcc fault?    
                          printf("Short to Vcc\n");           // Write text in first row
-                         sleep(1);                                             
+                         return (-1);                                             
                  }                                                                   
          }                                                                           
          else{                                                                       
-                 printf("Display the temp without error %.3f \n \n", temperature);             
+                 *tempValue = temperature;
+		 *internalTempValue = internalTemperature;
+		 //printf("Display the temp without error %.3f \n \n", temperature);             
         }                                                                           
-        sleep(1);                                                              
+        return (0);                                                              
 
 }                                                                                                        
                                                                                                          
                                                                                                          
 int main()                                                                                               
 {                                                                                                        
-        spi_init();			// initialize the SPI bus                                                
+        float thermocoupleTemp, internalTemp;
+	
+	spi_init();			// initialize the SPI bus                                                
 	spi_select_bus(MIKROBUS_1);     // Ensure you have Mikrobus_1 selected for the SPI port                                                  
                                                                                                  
         while(1) {                                                                        
-                MAX31855_Read();                                                    
+                if(MAX31855_Read(&thermocoupleTemp, &internalTemp) < 0) {
+			printf("Error reading the temp");
+		} else {
+			printf("Thermocouple temp is %.2f Internal temp is %.4f \n", thermocoupleTemp, internalTemp);
+		}
+		sleep(1);
         }                                                                                   
                                                                                             
 	spi_release();			// release the SPI bus
