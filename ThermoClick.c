@@ -8,11 +8,14 @@
       - Initial release (DO);
 	20170808
 	- Converted to Creator Ci40
+	20170809
+	- Added in Internal Temperature reading
  * Description:
       This is a simple project which demonstrates the use of THERMO click board.
       Temperature measured by the thermocouple is converter by MAX31855 and written to the console.
       Displayed temperature is in degree Celsius.
       Example also includes fault detection. (Open circuit, Short to GND and Short to VCC).
+      https://download.mikroe.com/documents/datasheets/max31855.pdf
  * Test configuration:
      Dev. Board:      Ci40
      Ext. Modules:    THERMO click - ac:THERMO_click
@@ -57,18 +60,18 @@ void MAX31855_Read() {
         remTemp = remTemp & 0x03;                     // And with 0b111 to get the 3 bits that define decimal part of temperature value         
         temperature = remTemp * 0.25;                 // Multiply bottom three bits by 0.25 to get decimal part of temerature and store                                     
         intTemp = tmp >> 4;                           // Remove D16 through D19 which do not contain integer part of temperature value               
-        temperature += intTemp;                       // Add integer part of temperature value to Temperature value                
+        temperature += intTemp;                       // Add integer part to temperature value                
         printf("Read the Temp %.3f \n", temperature); // Write temperature to the console                                           
         
-	internalTmp = buffer[2];
-	internalTmp = internalTmp << 8;
-	internalTmp = internalTmp | buffer[3];
-	internalRemTmp = internalTmp >> 4;
-	internalRemTmp = internalRemTmp & 0x1f;
-	internalTemperature = internalRemTmp * 0.0625;
-	internalIntTmp = internalTmp >> 9;
-	internalTemperature += internalIntTmp;
-	printf("Read the Internal Temp %.4f \n", internalTemperature);                                               
+	internalTmp = buffer[2];			// Place the first byte in internalTmp variable
+	internalTmp = internalTmp << 8;			// Bit shift first byte up 8 bits
+	internalTmp = internalTmp | buffer[3];		// Place second byte in internalTmp variable 
+	internalRemTmp = internalTmp >> 4;		// Remove D0 through D3 from the 32 bit number
+	internalRemTmp = internalRemTmp & 0x1f;		// And with 0b11111 to get the 5 bits that define decimal part of internal temperature value
+	internalTemperature = internalRemTmp * 0.0625;	// Multiply bottom three bits by 0.0625 to get decimal part of temerature and store
+	internalIntTmp = internalTmp >> 9;		// Remove D16 through D19 which do not contain integer part of temperature value
+	internalTemperature += internalIntTmp;		// Add integer part to internalTemperature value
+	printf("Read the Internal Temp %.4f \n", internalTemperature);	// Write internal temperature to the console 
 
         if((buffer[1] & 0x01) == 0x01){          // Fault detection                           
                  printf("Error!");                                                                
