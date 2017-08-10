@@ -194,23 +194,23 @@ int main()
 	sleep(1);
 	
 	relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_1);
-	printf("Disable Relay 1\n);
+	printf("Disable Relay 1\n");
 	sleep(1);
 	
 	relay4_click_enable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_2);
-	printf("Enable Relay 2\n);
+	printf("Enable Relay 2\n");
 	sleep(1);
 	
 	relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_2);
-	printf("Disable Relay 2\n);
+	printf("Disable Relay 2\n");
 	sleep(1);
 	
 	relay4_click_enable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_4);
-	printf("Enable Relay 4\n);
+	printf("Enable Relay 4\n");
 	sleep(1);
 	
 	relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_4);
-	printf("Disable Relay 4");
+	printf("Disable Relay 4\n");
 	sleep(1);
 	
 		
