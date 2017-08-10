@@ -61,29 +61,23 @@ static int find_gpio(uint8_t mikrobus_index, uint8_t relay)
             return -1;
         }
     }
-    else {
-	    if (relay == RELAY4_CLICK_RELAY_2) {
-        	if (gpio_get_pin(mikrobus_index, TYPE_RST, &gpio_pin) < 0) {
-            	fprintf(stderr, "relay4: Invalid pin type\n");
-            	return -1;
-        	}
-    	}
+    else if (relay == RELAY4_CLICK_RELAY_2) {
+        if (gpio_get_pin(mikrobus_index, TYPE_RST, &gpio_pin) < 0) {
+           fprintf(stderr, "relay4: Invalid pin type\n");
+           return -1;
+        }
     }
-    else {
-	    if (relay == RELAY4_CLICK_RELAY_4) {
+    else if (relay == RELAY4_CLICK_RELAY_4) {
         	if (gpio_get_pin(mikrobus_index, TYPE_AN, &gpio_pin) < 0) {
             	fprintf(stderr, "relay4: Invalid pin type\n");
             	return -1;
         	}
     	}
-    }
-    else {
-	    if (relay == RELAY4_CLICK_RELAY_3) {
-        	fprintf(stderr, "relay4: Can't set relay3 as it is a reserved pin\n");
-            	return -1;
-        	}
-    }
-
+    else if (relay == RELAY4_CLICK_RELAY_3) {
+       	fprintf(stderr, "relay4: Can't set relay3 as it is a reserved pin\n");
+        return -1;
+        }
+    
     return gpio_pin;
 }
 
@@ -193,7 +187,7 @@ int main()
                 relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_2);
 		relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_4);
 		relay4_click_enable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_1);
-		sleep_ms(250);
+		sleep(1);
 		
 		if(MAX31855_Read(&thermocoupleTemp, &internalTemp) < 0) {
 			printf("Error reading the temp");
@@ -203,7 +197,7 @@ int main()
 
 		relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_1);
 		relay4_click_enable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_2);
-		sleep_ms(250);
+		sleep(1);
 		
 		if(MAX31855_Read(&thermocoupleTemp, &internalTemp) < 0) {
 			printf("Error reading the temp");
@@ -213,7 +207,7 @@ int main()
 
 		relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_2);
 		relay4_click_enable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_4);
-		sleep_ms(250);
+		sleep(1);
 		
 		if(MAX31855_Read(&thermocoupleTemp, &internalTemp) < 0) {
 			printf("Error reading the temp");
