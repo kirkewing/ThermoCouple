@@ -35,6 +35,81 @@
 #include <letmecreate/core/gpio_monitor.h>
 #include <letmecreate/core/spi.h>
 
+/** Relay Click channel index */
+enum RELAY4_CLICK_RELAY {
+    RELAY4_CLICK_RELAY_1,
+    RELAY4_CLICK_RELAY_2,
+    RELAY4_CLICK_RELAY_3,
+    RELAY4_CLICK_RELAY_4,
+    RELAY4_CLICK_RELAY_COUNT
+};
+
+static int find_gpio(uint8_t mikrobus_index, uint8_t relay)
+{
+    uint8_t gpio_pin = 0;
+
+    if (relay >= RELAY4_CLICK_RELAY_COUNT) {
+        fprintf(stderr, "relay2: Invalid relay index.\n");
+        return -1;
+    }
+
+    if (relay == RELAY4_CLICK_RELAY_1) {
+        if (gpio_get_pin(mikrobus_index, TYPE_PWM, &gpio_pin) < 0) {
+            fprintf(stderr, "relay4: Invalid pin type\n");
+            return -1;
+        }
+    }
+    else if (relay == RELAY4_CLICK_RELAY_2 {
+        if (gpio_get_pin(mikrobus_index, TYPE_RST, &gpio_pin) < 0) {
+            fprintf(stderr, "relay4: Invalid pin type\n");
+            return -1;
+        }
+    }
+    else if (relay == RELAY4_CLICK_RELAY_4 {
+        if (gpio_get_pin(mikrobus_index, TYPE_AN, &gpio_pin) < 0) {
+            fprintf(stderr, "relay4: Invalid pin type\n");
+            return -1;
+        }
+    }
+    else if (relay == RELAY4_CLICK_RELAY_3 {
+        fprintf(stderr, "relay4: Can't set relay3\n");
+            return -1;
+        }
+    }
+    
+
+    return gpio_pin;
+}
+
+int relay4_click_enable_relay(uint8_t mikrobus_index, uint8_t relay)
+{
+    return relay2_click_set_relay_state(mikrobus_index, relay, 1);
+}
+
+int relay4_click_disable_relay(uint8_t mikrobus_index, uint8_t relay)
+{
+    return relay2_click_set_relay_state(mikrobus_index, relay, 0);
+}
+
+int relay4_click_set_relay_state(uint8_t mikrobus_index, uint8_t relay, uint8_t state)
+{
+    uint8_t gpio_pin = 0;
+    int ret = 0;
+
+    ret = find_gpio(mikrobus_index, relay);
+    if (ret < 0)
+        return -1;
+
+    gpio_pin = (uint8_t)ret;
+
+    if (gpio_init(gpio_pin) < 0
+    ||  gpio_set_direction(gpio_pin, GPIO_OUTPUT) < 0
+    ||  gpio_set_value(gpio_pin, !!state) < 0)
+        return -1;
+
+    return 0;
+}
+
 int MAX31855_Read(float *tempValue, float *internalTempValue) {                                                                             
 	int tmp, intTemp, remTemp;
 	int internalTmp, internalIntTmp, internalRemTmp;
@@ -107,14 +182,39 @@ int main()
 	
 	spi_init();			// initialize the SPI bus                                                
 	spi_select_bus(MIKROBUS_1);     // Ensure you have Mikrobus_1 selected for the SPI port                                                  
-                                                                                                 
+        
         while(1) {                                                                        
-                if(MAX31855_Read(&thermocoupleTemp, &internalTemp) < 0) {
+                relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_2);
+		relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_4);
+		relay4_click_enable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_1);
+		sleep_ms(250);
+		
+		if(MAX31855_Read(&thermocoupleTemp, &internalTemp) < 0) {
 			printf("Error reading the temp");
 		} else {
-			printf("Thermocouple temp is %.2f Internal temp is %.4f \n", thermocoupleTemp, internalTemp);
+			printf("Thermocouple Relay1 temp is %.2f Internal temp is %.4f \n", thermocoupleTemp, internalTemp);
 		}
-		sleep(1);
+
+		relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_1);
+		relay4_click_enable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_2);
+		sleep_ms(250);
+		
+		if(MAX31855_Read(&thermocoupleTemp, &internalTemp) < 0) {
+			printf("Error reading the temp");
+		} else {
+			printf("Thermocouple Relay2 temp is %.2f Internal temp is %.4f \n", thermocoupleTemp, internalTemp);
+		}
+
+		relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_2);
+		relay4_click_enable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_4);
+		sleep_ms(250);
+		
+		if(MAX31855_Read(&thermocoupleTemp, &internalTemp) < 0) {
+			printf("Error reading the temp");
+		} else {
+			printf("Thermocouple Relay4 temp is %.2f Internal temp is %.4f \n", thermocoupleTemp, internalTemp);
+		}
+
         }                                                                                   
                                                                                             
 	spi_release();			// release the SPI bus
