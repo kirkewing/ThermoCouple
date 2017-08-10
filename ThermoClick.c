@@ -189,6 +189,31 @@ int main()
 	spi_init();			// initialize the SPI bus                                                
 	spi_select_bus(MIKROBUS_1);     // Ensure you have Mikrobus_1 selected for the SPI port                                                  
         
+	relay4_click_enable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_1);
+	printf("Enable Relay 1");
+	sleep(1);
+	
+	relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_1);
+	printf("Disable Relay 1");
+	sleep(1);
+	
+	relay4_click_enable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_2);
+	printf("Enable Relay 2");
+	sleep(1);
+	
+	relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_2);
+	printf("Disable Relay 2");
+	sleep(1);
+	
+	relay4_click_enable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_4);
+	printf("Enable Relay 4");
+	sleep(1);
+	
+	relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_4);
+	printf("Disable Relay 4");
+	sleep(1);
+	
+		
         while(1) {                                                                        
                 relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_2);
 		relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_4);
@@ -216,7 +241,7 @@ int main()
 		sleep(1);
 		
 		if(MAX31855_Read(&thermocoupleTemp, &internalTemp) < 0) {
-			printf("Error reading the temp");
+			printf("Error reading the temp\n");
 		} else {
 			printf("Thermocouple Relay4 temp is %.2f Internal temp is %.4f \n", thermocoupleTemp, internalTemp);
 		}
