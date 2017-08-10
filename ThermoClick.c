@@ -12,6 +12,8 @@
 	- Added in Internal Temperature reading
 	20170809
 	-Encapsulated the code properly
+	20170810
+	- Added in the code for Relay 4
  * Description:
       This is a simple project which demonstrates the use of THERMO click board.
       Temperature measured by the thermocouple is converter by MAX31855 and written to the console.
@@ -59,19 +61,19 @@ static int find_gpio(uint8_t mikrobus_index, uint8_t relay)
             return -1;
         }
     }
-    else if (relay == RELAY4_CLICK_RELAY_2 {
+    else if (relay == RELAY4_CLICK_RELAY_2) {
         if (gpio_get_pin(mikrobus_index, TYPE_RST, &gpio_pin) < 0) {
             fprintf(stderr, "relay4: Invalid pin type\n");
             return -1;
         }
     }
-    else if (relay == RELAY4_CLICK_RELAY_4 {
+    else if (relay == RELAY4_CLICK_RELAY_4) {
         if (gpio_get_pin(mikrobus_index, TYPE_AN, &gpio_pin) < 0) {
             fprintf(stderr, "relay4: Invalid pin type\n");
             return -1;
         }
     }
-    else if (relay == RELAY4_CLICK_RELAY_3 {
+    else if (relay == RELAY4_CLICK_RELAY_3) {
         fprintf(stderr, "relay4: Can't set relay3\n");
             return -1;
         }
@@ -121,7 +123,7 @@ int MAX31855_Read(float *tempValue, float *internalTempValue) {
 
 	if (spi_transfer(NULL, buffer, sizeof(buffer)) < 0) {			// Read four bytes from SPI port, pass NULL for the TX buffer, buffer for the RX buffer                                                          
                 printf("thermo: Failed to read temperature from sensor\n");                     
-                return (-1);                                                                                  
+                return -1;                                                                                  
         }                                                                                                
         
 	// printf ("The buffer 0 is %x \n", buffer[0]);  //debug code to print the buffer read from the MAX31855 to the console
@@ -153,17 +155,17 @@ int MAX31855_Read(float *tempValue, float *internalTempValue) {
                  printf("Error!");                                                                
                  if((buffer[3] & 0x01) == 0x01){        // Open circuit fault?  
                          printf("Open circuit\n");           // Write text in first row
-                         return (-1);                                             
+                         return -1;                                             
                  }                                                                                
                                                                                                   
                  if((buffer[3] & 0x02) == 0x02){        // Short to GND fault?                 
                          printf("Short to GND\n");           // Write text in first row
-                         return (-1);                                             
+                         return -1;                                             
                  }                                                                   
                                                                                      
                  if((buffer[3] & 0x04) == 0x04){        // Short to Vcc fault?    
                          printf("Short to Vcc\n");           // Write text in first row
-                         return (-1);                                             
+                         return -1;                                             
                  }                                                                   
          }                                                                           
          else{                                                                       
@@ -171,7 +173,7 @@ int MAX31855_Read(float *tempValue, float *internalTempValue) {
 		 *internalTempValue = internalTemperature;
 		 //printf("Display the temp without error %.3f \n \n", temperature);             
         }                                                                           
-        return (0);                                                              
+        return 0;                                                              
 
 }                                                                                                        
                                                                                                          
