@@ -93,9 +93,9 @@ int relay4_click_set_relay_state(uint8_t mikrobus_index, uint8_t relay, uint8_t 
 
     gpio_pin = (uint8_t)ret;
 
-    if (gpio_init(gpio_pin) < 0
-    ||  gpio_set_direction(gpio_pin, GPIO_OUTPUT) < 0
-    ||  gpio_set_value(gpio_pin, !!state) < 0)
+    if (gpio_initw(gpio_pin) < 0
+    ||  gpio_set_directionw(gpio_pin, GPIO_OUTPUT) < 0
+    ||  gpio_set_valuew(gpio_pin, !!state) < 0)
         return -1;
 
     return 0;
