@@ -36,6 +36,7 @@
 #include <letmecreate/core/gpio.h>
 #include <letmecreate/core/gpio_monitor.h>
 #include <letmecreate/core/spi.h>
+#include <letmecreate/click/export.h>
 
 /** Relay Click channel index */
 enum RELAY4_CLICK_RELAY {
