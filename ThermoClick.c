@@ -51,7 +51,7 @@ static int find_gpio(uint8_t mikrobus_index, uint8_t relay)
     uint8_t gpio_pin = 0;
 
     if (relay >= RELAY4_CLICK_RELAY_COUNT) {
-        fprintf(stderr, "relay2: Invalid relay index.\n");
+        fprintf(stderr, "relay4: Invalid relay index.\n");
         return -1;
     }
 
@@ -61,24 +61,28 @@ static int find_gpio(uint8_t mikrobus_index, uint8_t relay)
             return -1;
         }
     }
-    else if (relay == RELAY4_CLICK_RELAY_2) {
-        if (gpio_get_pin(mikrobus_index, TYPE_RST, &gpio_pin) < 0) {
-            fprintf(stderr, "relay4: Invalid pin type\n");
-            return -1;
-        }
+    else {
+	    if (relay == RELAY4_CLICK_RELAY_2) {
+        	if (gpio_get_pin(mikrobus_index, TYPE_RST, &gpio_pin) < 0) {
+            	fprintf(stderr, "relay4: Invalid pin type\n");
+            	return -1;
+        	}
+    	}
     }
-    else if (relay == RELAY4_CLICK_RELAY_4) {
-        if (gpio_get_pin(mikrobus_index, TYPE_AN, &gpio_pin) < 0) {
-            fprintf(stderr, "relay4: Invalid pin type\n");
-            return -1;
-        }
+    else {
+	    if (relay == RELAY4_CLICK_RELAY_4) {
+        	if (gpio_get_pin(mikrobus_index, TYPE_AN, &gpio_pin) < 0) {
+            	fprintf(stderr, "relay4: Invalid pin type\n");
+            	return -1;
+        	}
+    	}
     }
-    else if (relay == RELAY4_CLICK_RELAY_3) {
-        fprintf(stderr, "relay4: Can't set relay3\n");
-            return -1;
-        }
+    else {
+	    if (relay == RELAY4_CLICK_RELAY_3) {
+        	fprintf(stderr, "relay4: Can't set relay3 as it is a reserved pin\n");
+            	return -1;
+        	}
     }
-    
 
     return gpio_pin;
 }
