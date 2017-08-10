@@ -189,6 +189,7 @@ int main()
 	spi_init();			// initialize the SPI bus                                                
 	spi_select_bus(MIKROBUS_1);     // Ensure you have Mikrobus_1 selected for the SPI port                                                  
         
+	/*
 	relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_1);
 	relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_2);
 	relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_4);
@@ -218,26 +219,26 @@ int main()
 	relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_4);
 	printf("Disable Relay 4\n");
 	sleep(5);
-	
+	*/
 		
         while(1) {                                                                        
                 relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_2);
 		relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_4);
-		relay4_click_enable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_1);
+		/*relay4_click_enable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_1);
 		sleep(1);
 		
 		if(MAX31855_Read(&thermocoupleTemp, &internalTemp) < 0) {
-			printf("Error reading the temp");
+			printf("Error reading the relay 1 temp\n");
 		} else {
 			printf("Thermocouple Relay1 temp is %.2f Internal temp is %.4f \n", thermocoupleTemp, internalTemp);
 		}
 
-		relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_1);
+		relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_1); */
 		relay4_click_enable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_2);
 		sleep(1);
 		
 		if(MAX31855_Read(&thermocoupleTemp, &internalTemp) < 0) {
-			printf("Error reading the temp");
+			printf("Error reading the Relay 2 temp\n");
 		} else {
 			printf("Thermocouple Relay2 temp is %.2f Internal temp is %.4f \n", thermocoupleTemp, internalTemp);
 		}
@@ -247,7 +248,7 @@ int main()
 		sleep(1);
 		
 		if(MAX31855_Read(&thermocoupleTemp, &internalTemp) < 0) {
-			printf("Error reading the temp\n");
+			printf("Error reading the  relay 4 temp\n");
 		} else {
 			printf("Thermocouple Relay4 temp is %.2f Internal temp is %.4f \n", thermocoupleTemp, internalTemp);
 		}
