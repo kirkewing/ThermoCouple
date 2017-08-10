@@ -83,12 +83,12 @@ static int find_gpio(uint8_t mikrobus_index, uint8_t relay)
 
 int relay4_click_enable_relay(uint8_t mikrobus_index, uint8_t relay)
 {
-    return relay2_click_set_relay_state(mikrobus_index, relay, 1);
+    return relay4_click_set_relay_state(mikrobus_index, relay, 1);
 }
 
 int relay4_click_disable_relay(uint8_t mikrobus_index, uint8_t relay)
 {
-    return relay2_click_set_relay_state(mikrobus_index, relay, 0);
+    return relay4_click_set_relay_state(mikrobus_index, relay, 0);
 }
 
 int relay4_click_set_relay_state(uint8_t mikrobus_index, uint8_t relay, uint8_t state)
