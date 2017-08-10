@@ -222,7 +222,7 @@ int main()
 	*/
 		
         while(1) {                                                                        
-                relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_2);
+                //relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_2);
 		relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_4);
 		/*relay4_click_enable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_1);
 		sleep(1);
