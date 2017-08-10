@@ -88,6 +88,8 @@ int relay4_click_set_relay_state(uint8_t mikrobus_index, uint8_t relay, uint8_t 
     uint8_t gpio_pin = 0;
     int ret = 0;
 
+    gpio_get_pin(mikrobus_index, TYPE_PWM, &gpio_pin);
+	
     ret = find_gpio(mikrobus_index, relay);
     if (ret < 0)
         return -1;
