@@ -47,7 +47,7 @@ enum RELAY4_CLICK_RELAY {
     RELAY4_CLICK_RELAY_COUNT
 };
 
-static int find_gpio(uint8_t mikrobus_index, uint8_t relay)
+int find_gpio(uint8_t mikrobus_index, uint8_t relay)
 {
     uint8_t gpio_pin = 0;
 
