@@ -190,23 +190,23 @@ int main()
 	spi_select_bus(MIKROBUS_1);     // Ensure you have Mikrobus_1 selected for the SPI port                                                  
         
 	relay4_click_enable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_1);
-	printf("Enable Relay 1");
+	printf("Enable Relay 1\n");
 	sleep(1);
 	
 	relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_1);
-	printf("Disable Relay 1");
+	printf("Disable Relay 1\n);
 	sleep(1);
 	
 	relay4_click_enable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_2);
-	printf("Enable Relay 2");
+	printf("Enable Relay 2\n);
 	sleep(1);
 	
 	relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_2);
-	printf("Disable Relay 2");
+	printf("Disable Relay 2\n);
 	sleep(1);
 	
 	relay4_click_enable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_4);
-	printf("Enable Relay 4");
+	printf("Enable Relay 4\n);
 	sleep(1);
 	
 	relay4_click_disable_relay (MIKROBUS_2, RELAY4_CLICK_RELAY_4);
